@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+
+body{margin-top:20px;}
+
+.post-content{
+  border-radius: 4px;
+  width: 80%;
+  border: 1px solid #f1f2f2;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  overflow: hidden;
+  position: relative;
+}
+
+.profile-link{
+margin-left: 10pt;
+text-decoration: none;
+color: black;
+font-weight:bold;
+}
+
+.post-content img.post-image, video.post-video, .google-maps{
+  width: 100%;
+  height: auto;
+}
+
+.post-content .google-maps .map{
+  height: 300px;
+}
+
+.post-content .post-container{
+  padding: 20px;
+}
+
+.post-content .post-container .post-detail{
+  margin-left: 65px;
+  position: relative;
+}
+
+.post-content .post-container .post-detail .post-text{
+  line-height: 24px;
+  margin: 0;
+}
+
+.post-content .post-container .post-detail .reaction{
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.post-content .post-container .post-detail .post-comment{
+  display: inline-flex;
+  margin: 10px auto;
+  width: 100%;
+}
+
+.post-content .post-container .post-detail .post-comment img.profile-photo-sm{
+  margin-right: 10px;
+}
+
+.post-content .post-container .post-detail .post-comment .form-control{
+  height: 30px;
+  border: 1px solid #ccc;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  margin: 7px 0;
+  min-width: 0;
+}
+
+img.profile-photo-md {
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+}
+
+img.profile-photo-sm {
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+}
+
+.text-green {
+    color: #8dc63f;
+}
+
+.text-red {
+    color: #ef4136;
+}
+
+
+#my-comment:not(:placeholder-shown){
+width: 60em;
+}
+
+.btn-show{
+float:right;
+font-style:italic;
+}
+
+
+</style>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="container">
+    <div class="row">
+        <div class="col-md-8" style="background: #f8f8f8; width: 100%">
+            <div class="post-content">
+                <div class="post-container">
+
+                    <img src="{{post.user.profile.first.photo.url}}" alt="user" class="profile-photo-md pull-left">
+                    <div class="post-detail">
+                        <div class="user-info">
+                            <h3><a href="#" class="profile-link">{{post.user.username}}</a>
+                            </h3>
+                            <p class="text-muted">{{ post.title }}</p>
+                            <p class="text-muted">{{ post.created }}</p>
+                        </div>
+                        <!-- <div class="reaction">
+                            <a class="btn text-green"><i class="fa fa-thumbs-up"></i> 13</a>
+                            <a class="btn text-red"><i class="fa fa-thumbs-down"></i> 0</a>
+                        </div> -->
+                        <div class="line-divider"></div>
+                        <div class="post-text">
+                            <p style="width:90%;">{{ post.content }} <i class="em em-anguished"></i> <i
+                                    class="em em-anguished"></i> <i class="em em-anguished"></i></p>
+                        </div>
+                        <a type="button" class="btn-show" href="{{ user.get_all_posts }}">Show all {{ post.user }}'s posts</a>
+                        <div class="line-divider"></div>
+                        {% if comments %}
+                        {% for comment in comments %}
+                        <div class="post-comment">
+                            <img src="{{user.img.url}}" alt="" class="profile-photo-sm">
+                            <p><a href="{% url 'user_profile' pk=user.pk %}" class="profile-link">{{ comment.user
+                                }} </a><i class="em em-laughing">
+                            </i> {{ comment.content }} </p>
+                            <p class="text-muted">{{ comment.created }}</p>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        {% if user.is_authenticated %}
+                        <div class="post-comment">
+                            <img src="{{user.img.url}}" alt="" class="profile-photo-sm">
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="text" class="form-control" placeholder="Post a comment" id="my-comment">
+                            </form>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load socialaccount %}
+
+{% block content %}
+
+<main class="form-signin text-center container">
+  <form method="post">
+  {% csrf_token %}
+    <h1 class="h3 mb-3 fw-normal">Hello</h1>
+
+    <div class="form-floating">
+      <input type="text" class="form-control" id="floatingInput" name="username" placeholder="Username">
+      <label for="floatingInput">Username</label>
+    </div>
+
+    <div class="form-floating">
+      <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password">
+      <label for="floatingPassword">Password</label>
+    </div>
+
+    <div class="checkbox mb-3">
+      <label>
+          <a href="{% url 'password_reset' %}"> Forgot password </a>
+      </label>
+    </div>
+    <button class="w-100 btn btn-lg btn-primary" type="submit" >SignIn</button>
+    <p class="mt-5 mb-3 text-muted">© Blog</p>
+    <!-- <a href="#">Sign in with Google</a> -->
+  </form>
+</main>
+
+{% endblock %}

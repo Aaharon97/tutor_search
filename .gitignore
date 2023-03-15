@@ -1,0 +1,17 @@
+# Django #
+**/__pycache__/
+**/migrations/
+*.pyc
+*.log
+*.pot
+*.sqlite3
+
+#Sensitive files
+.DS_Store
+
+#idea
+.idea
+
+#.env
+*.venv
+
