@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, DeleteView
 from .models import Post, Comment, Category
-from django.contrib.auth.models import User
+from users.models import User
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponseForbidden
@@ -62,16 +62,19 @@ class IndexView(TemplateView):
     template_name = 'main.html'
 
     def get(self, request):
-        followed_users = [user.id for user in request.user.follows.all()]
+        if request.user.is_authenticated:
+            followed_users = [user.id for user in request.user.follows.all()]
+        else:
+            followed_users = []
 
         followed_users_posts = Post.objects.filter(
             user__id__in=followed_users).order_by('-id')
-        posts_recent_all = Post.objects.all().order_by(
-            '-id').exclude(id__in=followed_users_posts)
+        posts_recent_all = Post.objects.exclude(
+            id__in=followed_users_posts).order_by('-id')
         posts = (list(followed_users_posts) + list(posts_recent_all))[:6]
 
-        last_users = User.objects.all().order_by('-id').exclude(id__in=followed_users).exclude(
-            id=request.user.id)[:6]
+        last_users = User.objects.all().order_by('-id').exclude(
+            id__in=followed_users).exclude(id=request.user.id)[:6]
 
         params = {
             'posts_recent': posts,
@@ -100,8 +103,11 @@ class SearchView(TemplateView):
 class FeedView(TemplateView):
     template_name = 'feed.html'
 
-    def get(self, request):
-        followed_users = [user.id for user in request.user.follows.all()]
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            followed_users = [user.id for user in request.user.follows.all()]
+        else:
+            followed_users = []
         followed_users_posts = Post.objects.filter(
             user__id__in=followed_users).order_by('-id')
         posts_recent_all = Post.objects.all().order_by(

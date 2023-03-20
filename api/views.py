@@ -5,6 +5,7 @@ from . import serializers
 from django.contrib.auth.models import User
 from blog.models import Post, Comment, Category
 from .serializers import CategorySerializer, PostSerializer, CommentSerializer
+from django.contrib.auth import get_user_model
 
 
 class CategoryList(APIView):
@@ -76,7 +77,7 @@ class PostsByUser(APIView):
 
 
 class UserDetail(generics.RetrieveAPIView):
-    queryset = User.objects.all()
+    queryset = get_user_model().objects.all()
     serializer = serializers.UserSerializer
 
 
@@ -88,5 +89,5 @@ class UserDetail(generics.RetrieveAPIView):
 
 
 class UserList(generics.ListAPIView):
-    queryset = User.objects.all()
+    queryset = get_user_model().objects.all()
     serializer_class = serializers.UserSerializer

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, RedirectView
 from users.forms import UserRegistrationForm # заменяем импорт на форму из вашего приложения
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User # заменяем импорт модели на стандартную модель Django
+from users.models import User
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect

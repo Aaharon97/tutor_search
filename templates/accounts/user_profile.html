@@ -144,23 +144,7 @@
                              </a>
                         </div>
                     <div class="likes">
-                        {% if user not in post.likes.all %}
-                        <form action="{% url 'blog-post-likes' %}" method="post" class="follow-form">
-                            {% csrf_token %}
-                            <input type="hidden" name="user_id" value="{{post.id}}">
-                            <button type="submit" class="link-primary btn" style="padding:0;"><img
-                                    style="height: 16px;padding:0; margin-top: 100%"
-                                    src="{% static 'unliked.png' %}"></button>
-                        </form>
-                        {% else %}
-                        <form action="{% url 'blog-post-likes' %}" method="post" class="follow-form">
-                            {% csrf_token %}
-                            <input type="hidden" name="user_id" value="{{post.id}}">
-                            <button type="submit" class="link-primary btn" style="padding:0;"><img
-                                    style="height: 16px; padding:0; margin-top: 100%"
-                                    src="{% static 'like.png' %}"></button>
-                        </form>
-                        {% endif %}
+
                     </div>
                 </div>
             {% endfor %}
