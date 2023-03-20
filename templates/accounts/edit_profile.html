@@ -17,25 +17,25 @@
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <h1 class="h3 mb-3 fw-normal">Create new account</h1>
+        <h1 class="h3 mb-3 fw-normal">Edit your profile</h1>
 
         <div class="form-floating">
-            <input type="text" class="form-control" id="floatingInput1" name="username" placeholder="Username" required>
+            <input type="text" class="form-control" id="floatingInput1" name="username" placeholder="Username" value="{{user.username}}" required>
             <label for="floatingInput1">Username</label>
         </div>
 
         <div class="form-floating">
-            <input type="email" class="form-control" id="floatingInput2" name="email" placeholder="Email" required>
+            <input type="email" class="form-control" id="floatingInput2" name="email" placeholder="Email" value="{{user.email}}" required>
             <label for="floatingInput2">Email</label>
         </div>
 
         <div class="form-floating">
-            <input type="text" class="form-control" id="floatingInput3" name="first_name" placeholder="Your name" required>
+            <input type="text" class="form-control" id="floatingInput3" name="first_name" placeholder="Your name" value="{{user.first_name}}" required>
             <label for="floatingInput3">Your name</label>
         </div>
 
         <div class="form-floating">
-            <input type="text" class="form-control" id="floatingInput4" name="last_name" placeholder="Your surname" required>
+            <input type="text" class="form-control" id="floatingInput4" name="last_name" placeholder="Your surname" value="{{user.last_name}}" required>
             <label for="floatingInput4">Your surname</label>
         </div>
 
@@ -50,39 +50,39 @@
             <label for="floatingPassword2">Repeat your Password</label>
         </div>
 
-        <span>Additional Information (optional)</span>
+        <span>Additional Information</span>
 
         <div class="form-floating">
-            <input type="text" class="form-control" id="floatingInput5" name="country" placeholder="country">
+            <input type="text" class="form-control" id="floatingInput5" name="country" placeholder="country" value="{{user.country}}">
             <label for="floatingInput5">Country</label>
         </div>
 
         <div class="form-floating">
-            <input type="text" class="form-control" id="floatingInput6" name="city" placeholder="city">
+            <input type="text" class="form-control" id="floatingInput6" name="city" placeholder="city" value="{{user.city}}">
             <label for="floatingInput6">City</label>
         </div>
 
         <label for="floatingInput7">Biography</label>
         <div class="form-floating">
-            <textarea type="text" class="form-control" id="floatingInput7" name="bio" placeholder="bio"></textarea>
+            <textarea type="text" class="form-control" id="floatingInput7" name="bio" placeholder="bio" value="{{user.bio}}"></textarea>
         </div>
 
         <div class="form-floating">
-            <input type="text" class="form-control" id="floatingInput8" name="tg_username" placeholder="Telegram username">
+            <input type="text" class="form-control" id="floatingInput8" name="tg_username" placeholder="Telegram username" value="{{user.tg_username}}">
             <label for="floatingInput8">Telegram username</label>
         </div>
 
         <div class="form-floating">
-            <input type="text" class="form-control" id="floatingInput9" name="inst_username" placeholder="Instagram username">
+            <input type="text" class="form-control" id="floatingInput9" name="inst_username" placeholder="Instagram username" value="{{user.inst_username}}">
             <label for="floatingInput9">Instagram username</label>
         </div>
 
         <label for="floatingInput10">Your photo</label>
         <div class="">
-            <input type="file" class="form-control" id="floatingInput10" name="photo" accept="image/" style="margin-bottom: 10px">
+            <input type="file" class="form-control" id="floatingInput10" name="photo" accept="image/" style="margin-bottom: 10px" value="{{user.photo.url}}">
         </div>
 
-        <button class="w-100 btn btn-lg btn-primary" type="submit">Create new account</button>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Edit profile</button>
     </form>
 </main>
 {% endblock %}

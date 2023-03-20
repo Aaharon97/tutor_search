@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <body class="bg-light">
+        <main class="container">
+            {% if last_users %}
+            <div class="my-3 p-3 bg-body rounded shadow-sm">
+                <h6 class="border-bottom pb-2 mb-0">Suggestions</h6>
+                {% for sug_user in last_users %}
+                <a href="{{ user.get_user_url }}" style="text-decoration: none;">
+                    <div class="d-flex text-muted pt-3">
+                            <img src="{{sug_user.photo.url}}" alt="user" class="profile-photo-md pull-left me-2 avatar-feed">
+                        <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+                            <div class="d-flex justify-content-between">
+                                <strong class="text-gray-dark">{{sug_user.first_name}} {{sug_user.last_name}}</strong>
+                            </div>
+                            <span class="d-block" style="padding: 4px 4px 4px 0;">@{{user.username}}</span>
+                        </div>
+                        {% if user != sug_user %}
+                        <form action="{% url 'accounts-follow' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="user_id" value="{{sug_user.id}}">
+                            <button type="submit" style="text-decoration: none;" class="link-primary btn btn-link">Follow</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </main>
+        <script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <script src="js/main-page.js"></script>
+    </body>
+</html>
+
+{% endblock content %}

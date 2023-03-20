@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<script>
+  const sendEmail = () => {
+    const mail = "{{ otherUser.email }}";
+    const url = `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${mail}&body=${"Hello! How are you?"}`;
+  };
+</script>
+
+<section style="background-color: #eee;">
+  <div class="container py-5">
+
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <img src="{{otherUser.photo.url}}" alt="avatar"
+              class="avatar-profile">
+            <h5 class="my-3">{{ otherUser.username }}</h5>
+            <p class="text-muted mb-4">{{ otherUser.first_name }} {{ otherUser.last_name }}</p>
+            {% if user != otherUser %}
+              {% if otherUser in user.follows.all %}
+              <form action="{% url 'accounts-follow' %}" method="post" class="follow-form">
+                  {% csrf_token %}
+                  <input type="hidden" name="user_id" value="{{otherUser.id}}">
+                  <button type="submit" class="btn-primary btn" style="margin-bottom: 10px">Unfollow</button>
+              </form>
+              {% else %}
+              <form action="{% url 'accounts-follow' %}" method="post" class="follow-form">
+                  {% csrf_token %}
+                  <input type="hidden" name="user_id" value="{{otherUser.id}}">
+                  <button type="submit" class="btn-primary btn" style="margin-bottom: 10px">Follow</button>
+              </form>
+              {% endif %}
+            {% else %}
+            <form class="follow-form">
+              <a href="{% url 'accounts-user-edit' %}" class="btn-primary btn" style="margin-bottom: 10px">Edit profile</a>
+              </form>
+            {% endif %}
+            <a class="btn btn-dark" href="{{otherUser.get_user_followers_url}}" style="height: 55px; padding: 5px">
+              <span>Followers</span>
+              <p>{{otherUser.followersCount}}</p>
+            </a>
+            <a class="btn btn-dark" href="{{otherUser.get_user_following_url}}" style="height: 55px; padding: 5px">
+              <span>Following</span>
+              <p>{{otherUser.followsCount}}</p>
+            </a>
+          </div>
+        </div>
+        <div class="card mb-4 mb-lg-0">
+          <div class="card-body p-0">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Full Name</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ otherUser.get_full_name }}</p>
+                </div>
+              </div>
+              <hr>
+              <a href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to={{ otherUser.email }}&body={{ 'Hello!' }}" style="text-decoration: none; color: black">
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Email</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ otherUser.email }}</p>
+                </div>
+              </div>
+              </a>
+              {% if otherUser.inst_username %}
+              <hr>
+              <a href="https://instagram.com/{{ otherUser.tg_username }}/" style="text-decoration: none; color: black">
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Instagram</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">@{{ otherUser.inst_username }}</p>
+                </div>
+              </div>
+            </a>
+              {% endif %}
+              <hr>
+              {% if otherUser.inst_username %}
+              <a href="https://t.me/{{ otherUser.tg_username }}/" style="text-decoration: none; color: black">
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Telegram</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">@{{ otherUser.tg_username }}</p>
+                </div>
+              </div>
+              </a>
+              <hr>
+              {% endif %}
+              {% if otherUser.country or otherUser.city %}
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Address</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ otherUser.country }} {{ otherUser.city }}</p>
+                </div>
+              </div>
+              {% endif %}
+              {% if otherUser.bio %}
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">About me</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ otherUser.bio|linebreaksbr }}</p>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h6 class="border-bottom pb-2 mb-0">Recent posts</h6>
+            {% for post in otherUser.posts.all %}
+                            <div class="d-flex text-muted pt-3">
+                        <a href="{{ post.user.get_user_url }}">
+                            <img src="{{post.user.photo.url}}" alt="user" class="profile-photo-md pull-left me-2 avatar-feed">
+                        </a>
+
+                        <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+                            <a href="{{ user.get_user_url }}" style="text-decoration: none;">@{{post.user.username}}</a><span>. {{ post.created|timesince }} ago</span>
+                            <div class="d-flex justify-content-between">
+                            </div>
+                            <a type="button" href="{% url 'blog-post-detail' id=post.id %}" style="width: 100%; text-decoration: none;">
+                            <div class="d-flex justify-content-between" style="padding: 4px 4px 4px 0;">
+                                <strong class="text-dark">{{post.content|linebreaksbr}}</strong>
+                            </div>
+                             </a>
+                        </div>
+                    <div class="likes">
+                        {% if user not in post.likes.all %}
+                        <form action="{% url 'blog-post-likes' %}" method="post" class="follow-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="user_id" value="{{post.id}}">
+                            <button type="submit" class="link-primary btn" style="padding:0;"><img
+                                    style="height: 16px;padding:0; margin-top: 100%"
+                                    src="{% static 'unliked.png' %}"></button>
+                        </form>
+                        {% else %}
+                        <form action="{% url 'blog-post-likes' %}" method="post" class="follow-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="user_id" value="{{post.id}}">
+                            <button type="submit" class="link-primary btn" style="padding:0;"><img
+                                    style="height: 16px; padding:0; margin-top: 100%"
+                                    src="{% static 'like.png' %}"></button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}

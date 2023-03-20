@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <body class="bg-light">
+        <main class="container">
+            <div class="my-3 p-3 bg-body rounded shadow-sm">
+                <h6 class="border-bottom pb-2 mb-0"> Feed </h6>
+                {% for post in posts_recent %}
+                <div class="d-flex text-muted pt-3">
+                        <a href="{{ post.user.get_user_url }}">
+                            <img src="{{post.user.photo.url}}" alt="user" class="profile-photo-md pull-left me-2 avatar-feed">
+                        </a>
+
+                        <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+                            <a href="{{ user.get_user_url }}" style="text-decoration: none;">@{{post.user.username}}</a><span>. {{ post.created|timesince  }}
+                                </span>
+                            <div class="d-flex justify-content-between">
+                            </div>
+                            <a type="button" href="{% url 'blog-post-detail' id=post.id %}" style="width: 100%; text-decoration: none;">
+                            <div class="d-flex justify-content-between">
+                                <strong class="text-dark" style="padding: 4px 4px 4px 0;">{{post.content|linebreaksbr}}</strong>
+                            </div>
+                             </a>
+                        </div>
+                    <div class="likes">
+                        {% if user not in post.likes.all %}
+                        <form action="{% url 'blog-post-likes' %}" method="post" class="follow-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="user_id" value="{{post.id}}">
+                            <button type="submit" class="link-primary btn" style="padding:0;"><img
+                                    style="height: 16px;padding:0; margin-top: 100%"
+                                    src="{% static 'unliked.png' %}"></button>
+                        </form>
+                        {% else %}
+                        <form action="{% url 'blog-post-likes' %}" method="post" class="follow-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="user_id" value="{{post.id}}">
+                            <button type="submit" class="link-primary btn" style="padding:0;"><img
+                                    style="height: 16px; margin-top: 100%; padding:0;"
+                                    src="{% static 'like.png' %}"></button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+        </main>
+        <script src="https://getbootstrap.com/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <script src="js/main-page.js"></script>
+    </body>
+</html>
+
+{% endblock content %}
