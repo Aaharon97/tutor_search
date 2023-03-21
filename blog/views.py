@@ -12,23 +12,25 @@ from django.urls import reverse_lazy
 class PostView(TemplateView):
     template_name = 'post.html'
 
-    @method_decorator(login_required)
     def get(self, request, id):
         post = Post.objects.get(id=id)
         comments = Comment.objects.filter(post__id=id)
+        category = post.category
 
         params = {
             'post': post,
             'comments': comments,
+            'category': category,
         }
         return render(request, self.template_name, params)
 
     def post(self, request):
         content = escape(request.POST["new_post"])
-        Post.objects.create(user=request.user, content=content)
+        category_id = request.POST.get("category_id")
+        category = Category.objects.get(id=category_id)
+        Post.objects.create(user=request.user, content=content, category=category)
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
 
 class PostDeleteView(DeleteView):
     model = Post
@@ -76,9 +78,13 @@ class IndexView(TemplateView):
         last_users = User.objects.all().order_by('-id').exclude(
             id__in=followed_users).exclude(id=request.user.id)[:6]
 
+        # Добавляем описание сайта
+        site_description = "This website was created to help students find experienced tutors in various subjects. On our website you can find tutors who can help you prepare for exams, improve your knowledge and skills, and get professional help in learning."
+
         params = {
             'posts_recent': posts,
-            'last_users': last_users
+            'last_users': last_users,
+            'site_description': site_description # Добавляем описание сайта в контекст
         }
 
         return render(request, self.template_name, params)
@@ -87,13 +93,13 @@ class IndexView(TemplateView):
 class SearchView(TemplateView):
     template_name = 'main.html'
 
+    @method_decorator(login_required)
     def post(self, request):
-        content = request.POST['content']
+        content = request.POST.get('content', '')  # Если ключ 'content' не найден, то вернется пустая строка
 
         posts_by_title = Post.objects.filter(title__icontains=content)
         posts_by_content = Post.objects.filter(content__icontains=content)
         posts = posts_by_title | posts_by_content
-
         params = {
             'posts_recent': posts,
         }

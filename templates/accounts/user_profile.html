@@ -2,12 +2,9 @@
 {% load static %}
 
 {% block content %}
-<script>
-  const sendEmail = () => {
-    const mail = "{{ otherUser.email }}";
-    const url = `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${mail}&body=${"Hello! How are you?"}`;
-  };
-</script>
+
+            <h5 class="my-3">{{ follows }}</h5>
+
 
 <section style="background-color: #eee;">
   <div class="container py-5">
@@ -39,14 +36,7 @@
               <a href="{% url 'accounts-user-edit' %}" class="btn-primary btn" style="margin-bottom: 10px">Edit profile</a>
               </form>
             {% endif %}
-            <a class="btn btn-dark" href="{{otherUser.get_user_followers_url}}" style="height: 55px; padding: 5px">
-              <span>Followers</span>
-              <p>{{otherUser.followersCount}}</p>
-            </a>
-            <a class="btn btn-dark" href="{{otherUser.get_user_following_url}}" style="height: 55px; padding: 5px">
-              <span>Following</span>
-              <p>{{otherUser.followsCount}}</p>
-            </a>
+
           </div>
         </div>
         <div class="card mb-4 mb-lg-0">
@@ -130,11 +120,10 @@
             {% for post in otherUser.posts.all %}
                             <div class="d-flex text-muted pt-3">
                         <a href="{{ post.user.get_user_url }}">
-                            <img src="{{post.user.photo.url}}" alt="user" class="profile-photo-md pull-left me-2 avatar-feed">
                         </a>
 
                         <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
-                            <a href="{{ user.get_user_url }}" style="text-decoration: none;">@{{post.user.username}}</a><span>. {{ post.created|timesince }} ago</span>
+                            <a href="{{ user.get_user_url }}" style="text-decoration: none;">@{{post.user.username}}</a><span>. {{ post.date_created|timesince }} ago</span>
                             <div class="d-flex justify-content-between">
                             </div>
                             <a type="button" href="{% url 'blog-post-detail' id=post.id %}" style="width: 100%; text-decoration: none;">

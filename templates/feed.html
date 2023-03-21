@@ -8,11 +8,9 @@
                 {% for post in posts_recent %}
                 <div class="d-flex text-muted pt-3">
                         <a href="{{ post.user.get_user_url }}">
-                            <img src="{{post.user.photo.url}}" alt="user" class="profile-photo-md pull-left me-2 avatar-feed">
                         </a>
-
                         <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
-                            <a href="{{ user.get_user_url }}" style="text-decoration: none;">@{{post.user.username}}</a><span>. {{ post.created|timesince  }}
+                            <a href="{{ post.user.get_user_url }}" style="text-decoration: none;">@{{post.user.username}}</a><span>. {{ post.date_created|timesince  }}
                                 </span>
                             <div class="d-flex justify-content-between">
                             </div>
