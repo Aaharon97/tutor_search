@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from django.views.generic import TemplateView, DeleteView
 from .models import Post, Comment, Category
@@ -92,16 +93,25 @@ class IndexView(TemplateView):
 
 class SearchView(TemplateView):
     template_name = 'main.html'
+    User = get_user_model()
 
-    @method_decorator(login_required)
     def post(self, request):
-        content = request.POST.get('content', '')  # Если ключ 'content' не найден, то вернется пустая строка
+        content = request.POST.get('content', '')
+        search_type = request.POST.get('search_type', 'post')
 
         posts_by_title = Post.objects.filter(title__icontains=content)
         posts_by_content = Post.objects.filter(content__icontains=content)
         posts = posts_by_title | posts_by_content
+
+        users_by_username = User.objects.filter(username__icontains=content)
+        users_by_first_name = User.objects.filter(first_name__icontains=content)
+        users_by_last_name = User.objects.filter(last_name__icontains=content)
+        users = users_by_username | users_by_first_name | users_by_last_name
+
         params = {
             'posts_recent': posts,
+            'users': users,
+            'search_type': search_type,
         }
         return render(request, self.template_name, params)
 

@@ -9,7 +9,6 @@ class User(AbstractUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=100, null=True, blank=True)
     last_name = models.CharField(max_length=100, null=True, blank=True)
-    photo = models.ImageField(null=True, blank=True, default="userAvatar.png")
     city = models.CharField(max_length=100, null=True, blank=True)
     country = models.CharField(max_length=100, null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
